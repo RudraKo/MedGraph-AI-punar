@@ -526,8 +526,6 @@ ORDER BY i.severity DESC;
 ↓
 [Persistence: SQLite with WAL Mode]
 
-```
-
 **Key Architectural Decisions**:
 
 - **Repository Pattern**: Abstracts data access logic behind interfaces, enabling seamless migration from SQLite to PostgreSQL/DynamoDB without touching domain logic.
@@ -573,7 +571,7 @@ PATIENT_PROFILE (1) ──< (N) VISITS (N) >── (1) DOCTOR_PROFILE
 │
 └──< INTERACTIONS >── DRUGS
 
-````
+```
 
 **Schema Specifications**:
 
@@ -766,7 +764,7 @@ The backend exposes a production-grade REST API following **JSON:API v1.1** spec
     ]
   }
 }
-````
+```
 
 **Response Envelope**:
 
