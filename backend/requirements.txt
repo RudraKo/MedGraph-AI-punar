@@ -1,8 +1,14 @@
+fastapi
+uvicorn
+python-multipart
+
+SQLAlchemy
+psycopg2-binary
+
+redis
+celery
 
 opencv-python-headless
 pytesseract
 Pillow
 rapidfuzz
-fastapi
-uvicorn
-python-multipart

@@ -22,7 +22,7 @@ class InteractionEngine:
         SeverityLevel.CONTRAINDICATED: 5
     }
 
-    def __init__(self, scoring_strategy: RiskScoringStrategy = None):
+    def __init__(self, scoring_strategy=None):
         """
         Inject scoring strategy via constructor (Strategy Pattern).
         Defaults to ExponentialRiskStrategy if none provided.
