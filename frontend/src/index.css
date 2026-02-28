@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --surface: #F8F9FA;
+  --card: #FFFFFF;
+  --ink: #0F233E;
+  --muted: #4B5563;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--surface);
+  color: var(--ink);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@layer components {
+  .glass-card {
+    @apply rounded-xl border border-surface-border bg-surface-light p-6 shadow-card transition-all duration-300;
+  }
+
+  .section-title {
+    @apply text-lg font-semibold tracking-tight text-brand-navy;
+  }
+
+  .subtle-text {
+    @apply text-sm text-gray-500;
+  }
+
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center rounded-xl bg-brand-blue px-4 py-2.5 text-sm font-semibold text-white transition-all shadow-glow hover:bg-blue-700 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:shadow-none;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl border border-surface-border bg-surface-light px-4 py-2.5 text-sm font-semibold text-brand-navy transition-all hover:bg-gray-50 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-navy focus:ring-offset-2;
+  }
+}
