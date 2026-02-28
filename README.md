@@ -159,3 +159,31 @@ npm run dev
 ### Database Management
 
 SQLite initializes automatically on first run. Migration history is managed via Alembic.
+
+
+
+### Data Sources
+
+Medicine Review Dataset — Kaggle
+https://www.kaggle.com/code/aadyasingh55/medicine-review-dataset/input
+
+Cleaned Medicines Dataset — Kaggle
+https://www.kaggle.com/code/omarshokrani/cleaned-medicines-dataset-dashboard/input
+
+Drug Side Effects Database — European Molecular Biology Laboratory
+http://sideeffects.embl.de/drugs/
+
+CP3403 Drug Dataset — Kaggle
+https://www.kaggle.com/code/guoyuye/cp3403/input
+
+Medicine Details Dataset (11K Records) — Kaggle
+https://www.kaggle.com/datasets/singhnavjot2062001/11000-medicine-details/data
+
+Biomedical Drug Dataset — Mendeley Data
+https://data.mendeley.com/datasets/md5czfsfnd/1
+
+DrugBank Database — DrugBank
+https://go.drugbank.com/releases/latest
+
+OpenFDA Drug Data — U.S. Food and Drug Administration
+https://open.fda.gov/data/downloads/
