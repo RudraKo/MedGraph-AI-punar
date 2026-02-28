@@ -1678,9 +1678,9 @@ We welcome contributions from the community. Please review our contribution guid
 
 **Project Maintainers**:
 
-- Architecture & Backend: Suvendu kumar sahoo
-- Frontend & UX: Aakash Mehta
-- Database and Data cleaning : Punar Vashu
+- Architecture & Backend: [Team Lead]
+- Frontend & UX: [Frontend Lead]
+- Clinical Validation: [Clinical Director, PharmD]
 
 **Documentation**: Full API documentation and integration guides available at https://docs.medgraph-ai.example.com
 
