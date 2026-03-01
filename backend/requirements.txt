@@ -9,3 +9,6 @@ fuzzywuzzy
 python-Levenshtein
 pydantic
 python-multipart
+pytesseract
+opencv-python-headless
+Pillow

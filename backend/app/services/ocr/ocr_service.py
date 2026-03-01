@@ -5,7 +5,10 @@ from concurrent.futures import ThreadPoolExecutor
 import pytesseract
 import cv2
 
-from app.core.config import get_settings
+try:
+    from backend.app.core.config import get_settings
+except ModuleNotFoundError:
+    from app.core.config import get_settings
 from .image_processor import ImageProcessor
 from .text_cleaner import TextCleaner
 from .drug_matcher import DrugMatcher

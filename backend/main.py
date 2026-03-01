@@ -2,13 +2,32 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
+from typing import Any
 try:
     from backend.routers import auth, drugs, interactions, prescriptions, schedules, alerts, scan
-    from backend.app.services.ocr.ocr_service import get_ocr_runtime_status
-except ModuleNotFoundError:
-    # Support running tests from inside the backend directory (PYTHONPATH=.)
-    from routers import auth, drugs, interactions, prescriptions, schedules, alerts, scan
-    from app.services.ocr.ocr_service import get_ocr_runtime_status
+except ModuleNotFoundError as exc:
+    if exc.name == "backend" or (exc.name and exc.name.startswith("backend.")):
+        # Support running tests from inside the backend directory (PYTHONPATH=.)
+        from routers import auth, drugs, interactions, prescriptions, schedules, alerts, scan
+    else:
+        raise
+
+
+def get_ocr_runtime_status_safe() -> dict[str, Any]:
+    try:
+        try:
+            from backend.app.services.ocr.ocr_service import get_ocr_runtime_status
+        except ModuleNotFoundError as exc:
+            if exc.name == "backend" or (exc.name and exc.name.startswith("backend.")):
+                from app.services.ocr.ocr_service import get_ocr_runtime_status
+            else:
+                raise
+        return get_ocr_runtime_status()
+    except Exception as exc:  # Keep API bootable even without OCR deps
+        return {
+            "ready": False,
+            "message": f"OCR runtime unavailable: {exc}",
+        }
 
 load_dotenv()
 
@@ -39,7 +58,7 @@ def read_root():
 
 @app.get("/health")
 def health_check():
-    ocr_status = get_ocr_runtime_status()
+    ocr_status = get_ocr_runtime_status_safe()
     return {
         "status": "healthy",
         "ocr_ready": ocr_status["ready"],
@@ -49,4 +68,4 @@ def health_check():
 
 @app.get("/health/ocr")
 def ocr_health_check():
-    return get_ocr_runtime_status()
+    return get_ocr_runtime_status_safe()
