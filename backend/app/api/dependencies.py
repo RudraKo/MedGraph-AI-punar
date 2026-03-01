@@ -73,7 +73,7 @@ def rate_limit_dependency(
     if not settings.rate_limit_enabled:
         return
 
-    if request.url.path in {"/health", "/health/live", "/health/ready"}:
+    if request.url.path in {"/health", "/health/live", "/health/ready", "/health/ocr"}:
         return
 
     client_ip = request.client.host if request.client else "unknown"

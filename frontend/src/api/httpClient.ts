@@ -16,6 +16,9 @@ export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1',
 });
 
+// Backward-compatible alias used by newer API modules.
+export const httpClient = apiClient;
+
 apiClient.interceptors.request.use((config) => {
   const token = getCookie('medgraph_token');
   if (token) {

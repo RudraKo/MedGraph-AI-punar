@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 import { apiClient } from '../api/httpClient';
 
+type AuthUser = {
+    name?: string;
+    role?: string;
+};
+
 export function useAuth() {
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<AuthUser | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

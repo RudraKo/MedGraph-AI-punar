@@ -42,6 +42,10 @@ class Settings:
     celery_broker_url: str
     celery_result_backend: str
 
+    tesseract_cmd: str
+    ocr_language: str
+    ocr_required_for_readiness: bool
+
     allowed_origins: tuple[str, ...]
 
 
@@ -73,5 +77,8 @@ def get_settings() -> Settings:
             "CELERY_RESULT_BACKEND",
             os.getenv("REDIS_URL", "redis://localhost:6379/2"),
         ),
+        tesseract_cmd=os.getenv("TESSERACT_CMD", "").strip(),
+        ocr_language=os.getenv("OCR_LANGUAGE", "eng").strip() or "eng",
+        ocr_required_for_readiness=_to_bool(os.getenv("OCR_REQUIRED_FOR_READINESS"), False),
         allowed_origins=allowed_origins if allowed_origins else ("*",),
     )

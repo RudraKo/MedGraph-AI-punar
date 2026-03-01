@@ -2,7 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
-from backend.routers import auth, drugs, interactions, prescriptions, schedules, alerts, scan
+try:
+    from backend.routers import auth, drugs, interactions, prescriptions, schedules, alerts, scan
+    from backend.app.services.ocr.ocr_service import get_ocr_runtime_status
+except ModuleNotFoundError:
+    # Support running tests from inside the backend directory (PYTHONPATH=.)
+    from routers import auth, drugs, interactions, prescriptions, schedules, alerts, scan
+    from app.services.ocr.ocr_service import get_ocr_runtime_status
 
 load_dotenv()
 
@@ -29,3 +35,18 @@ app.include_router(scan.router, prefix="/api/v1")
 @app.get("/")
 def read_root():
     return {"status": "MedGraph.AI API Running"}
+
+
+@app.get("/health")
+def health_check():
+    ocr_status = get_ocr_runtime_status()
+    return {
+        "status": "healthy",
+        "ocr_ready": ocr_status["ready"],
+        "ocr_message": ocr_status["message"],
+    }
+
+
+@app.get("/health/ocr")
+def ocr_health_check():
+    return get_ocr_runtime_status()

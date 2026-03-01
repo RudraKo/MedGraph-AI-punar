@@ -5,9 +5,56 @@ from concurrent.futures import ThreadPoolExecutor
 import pytesseract
 import cv2
 
+from app.core.config import get_settings
 from .image_processor import ImageProcessor
 from .text_cleaner import TextCleaner
 from .drug_matcher import DrugMatcher
+
+
+def get_ocr_runtime_status() -> Dict[str, Any]:
+    settings = get_settings()
+    configured_cmd = settings.tesseract_cmd or pytesseract.pytesseract.tesseract_cmd
+    requested_langs = [lang for lang in settings.ocr_language.split("+") if lang]
+
+    status: Dict[str, Any] = {
+        "ready": False,
+        "configured_tesseract_cmd": configured_cmd or None,
+        "ocr_language": settings.ocr_language,
+        "version": None,
+        "available_languages": [],
+        "missing_languages": [],
+        "message": "",
+    }
+
+    try:
+        status["version"] = str(pytesseract.get_tesseract_version())
+    except Exception as exc:
+        status["message"] = f"Tesseract binary unavailable: {exc}"
+        return status
+
+    try:
+        available_languages = pytesseract.get_languages(config="")
+        status["available_languages"] = available_languages
+    except Exception as exc:
+        status["message"] = f"Tesseract found, but language data check failed: {exc}"
+        return status
+
+    missing_languages = [
+        language for language in requested_langs if language not in status["available_languages"]
+    ]
+    status["missing_languages"] = missing_languages
+    status["ready"] = len(missing_languages) == 0
+
+    if status["ready"]:
+        status["message"] = "OCR runtime is ready."
+    else:
+        status["message"] = (
+            "Tesseract is installed, but requested OCR languages are missing: "
+            + ",".join(missing_languages)
+        )
+
+    return status
+
 
 class OCRService:
     """
@@ -15,6 +62,12 @@ class OCRService:
     and RapidFuzz matching entirely off the main event loop.
     Returns the required REST API JSON envelope.
     """
+    def __init__(self) -> None:
+        settings = get_settings()
+        self._ocr_language = settings.ocr_language
+        if settings.tesseract_cmd:
+            # Honor explicit binary path from env (useful on macOS/Homebrew).
+            pytesseract.pytesseract.tesseract_cmd = settings.tesseract_cmd
 
     def _execute_sync_pipeline(self, image_bytes: bytes, known_drugs: List[str]) -> Dict[str, Any]:
         """
@@ -28,7 +81,11 @@ class OCRService:
 
             # 2. Extract Text (Tesseract)
             # PSM 6 assumes a single uniform block of text (ideal for medicine boxes)
-            raw_text = pytesseract.image_to_string(processed_img, config='--psm 6')
+            raw_text = pytesseract.image_to_string(
+                processed_img,
+                config="--psm 6",
+                lang=self._ocr_language,
+            )
 
             if not raw_text.strip():
                  raise ValueError("No recognizable text found in the image.")

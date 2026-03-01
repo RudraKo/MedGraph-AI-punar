@@ -4,13 +4,13 @@ import { apiClient } from '../api/httpClient';
 
 export const DashboardPage: React.FC = () => {
     const { user, logout } = useAuth();
-    const [interactions, setInteractions] = React.useState<any>(null);
+    const [interactions, setInteractions] = React.useState<unknown>(null);
 
     const testInteraction = async () => {
         try {
             const res = await apiClient.post('/interactions/check', { drug_ids: ["Aspirin", "Ibuprofen"] });
             setInteractions(res.data);
-        } catch (e) { console.error(e); }
+        } catch (error: unknown) { console.error(error); }
     }
 
     return (
@@ -21,7 +21,7 @@ export const DashboardPage: React.FC = () => {
             <hr />
             <h3>Test Interaction API</h3>
             <button onClick={testInteraction}>Check Aspirin + Ibuprofen</button>
-            {interactions && <pre>{JSON.stringify(interactions, null, 2)}</pre>}
+            {interactions !== null && <pre>{JSON.stringify(interactions, null, 2)}</pre>}
         </div>
     );
 };
