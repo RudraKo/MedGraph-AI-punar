@@ -44,9 +44,9 @@ def test_interaction_engine():
     # Assertions mapped strictly to math rules
     # Aspirin + Warfarin = Severe (4)
     # Omeprazole + Citalopram = Moderate (2)
-    # Total Risk = 6
-    assert result["risk_score"] == 6
-    assert result["severity_summary"] == "Danger: Critical Polypharmacy Risk"
+    # Total Weight = 6 -> Normalized Score = 86
+    assert result["risk_score"] == 86
+    assert result["severity_summary"] == "Critical"
     assert len(result["interactions"]) == 2
     
     print("\n✅ Deterministic Graph Edge-Traversal completed successfully.")
