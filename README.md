@@ -16,6 +16,19 @@ cd backend && pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```
 
+OCR runtime env (recommended for deployment-safe startup):
+```bash
+export TESSERACT_CMD=/usr/bin/tesseract
+export OCR_LANGUAGE=eng
+export OCR_REQUIRED_FOR_READINESS=false
+```
+
+Health checks:
+```bash
+curl http://127.0.0.1:8000/health
+curl http://127.0.0.1:8000/health/ocr
+```
+
 Terminal 2 - Node.js Auth
 ```bash
 cd auth && npm install
