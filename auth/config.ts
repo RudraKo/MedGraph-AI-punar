@@ -17,7 +17,10 @@ export interface OAuthConfig {
 export function getOAuthConfig(): OAuthConfig {
     const clientId = process.env.GOOGLE_CLIENT_ID;
     const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-    const redirectUri = process.env.GOOGLE_REDIRECT_URI || "http://localhost:3000/oauth2callback";
+    const redirectUri =
+        process.env.GOOGLE_REDIRECT_URI ||
+        process.env.GOOGLE_CALLBACK_URL ||
+        "http://localhost:3000/auth/google/callback";
 
     if (!clientId || !clientSecret) {
         throw new Error("Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET in environment variables.");
