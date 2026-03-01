@@ -26,7 +26,7 @@ This roadmap details 52 meaningful, atomic engineering improvements designed to 
 
 ## 2. Performance & Scalability Optimization
 
-10. **`perf(cache): introduce Redis caching layer for drug interaction lookups`**
+10. **`perf(cache): introduce Redis caching layer for drug interaction lookups`** [COMPLETED]
     - *Why:* Drug-drug interactions rarely change intraday. Caching the output of the interaction engine drastically reduces duplicate NetworkX traversal times.
 11. **`perf(ocr): offload optical character recognition to Celery background workers`**
     - *Why:* OCR is CPU-heavy. Running it in the main FastAPI event loop blocks other requests. Celery isolates this workload.
@@ -43,7 +43,7 @@ This roadmap details 52 meaningful, atomic engineering improvements designed to 
 
 ## 3. Security Hardening
 
-17. **`feat(auth): implement JWT-based authentication with opaque refresh tokens`**
+17. **`feat(auth): implement JWT-based authentication with opaque refresh tokens`** [COMPLETED]
     - *Why:* Secures API endpoints and manages user sessions safely without storing state in the database.
 18. **`security(cors): rigidly restrict Cross-Origin Resource Sharing origins`**
     - *Why:* Prevents malicious domains from querying the MediGraph API. Wildcard `*` or broad regexes must be replaced with strict environment-configured frontend URLs.
@@ -79,7 +79,7 @@ This roadmap details 52 meaningful, atomic engineering improvements designed to 
     - *Why:* Allows B2B integrations where hospital systems can send arrays of hundreds of prescriptions for analysis in a single network roundtrip.
 31. **`refactor(api): implement API versioning via URL paths (v1/v2)`**
     - *Why:* Ensures backward compatibility for mobile apps or external integrations when schema-breaking changes are required.
-32. **`feat(api): add a health-check endpoint probing deep dependencies (DB, Redis)`**
+32. **`feat(api): add a health-check endpoint probing deep dependencies (DB, Redis)`** [COMPLETED]
     - *Why:* Standard `/health` only checks if the web server is up. A "deep" check ensures necessary infrastructure is actually accessible for orchestrators like Kubernetes.
 33. **`feat(api): implement cursor-based pagination for historical analyses`**
     - *Why:* Offset/limit pagination becomes extremely slow on large datasets. Cursors ensure fast, consistent database reads for infinite-scrolling frontends.
