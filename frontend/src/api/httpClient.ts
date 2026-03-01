@@ -1,26 +1,25 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api/v1'
+// Get token from cookie manually since it is not HttpOnly
+function getCookie(name: string) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift();
+}
 
-export const httpClient = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 15000,
-  headers: {
-    Accept: 'application/json',
-  },
-})
+export const authClient = axios.create({
+  baseURL: import.meta.env.VITE_AUTH_URL || 'http://localhost:3000',
+  withCredentials: true,
+});
 
-httpClient.interceptors.response.use(
-  (response) => response,
-  (error: AxiosError<{ detail?: string; error?: string }>) => {
-    const apiMessage =
-      error.response?.data?.detail ??
-      error.response?.data?.error ??
-      error.message ??
-      'Unexpected network error'
+export const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1',
+});
 
-    return Promise.reject(new Error(apiMessage))
-  },
-)
-
-export { API_BASE_URL }
+apiClient.interceptors.request.use((config) => {
+  const token = getCookie('medgraph_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
