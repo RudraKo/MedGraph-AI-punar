@@ -1,33 +1,25 @@
-import { Suspense, lazy } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { LoginPage } from './pages/LoginPage';
+import { OnboardingPage } from './pages/OnboardingPage';
+import { DashboardPage } from './pages/DashboardPage';
+import { useAuth } from './hooks/useAuth';
 
-import { AppLayout } from './components/common/AppLayout'
-import { LoadingState } from './components/common/LoadingState'
+const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+  const { user, loading } = useAuth();
+  if (loading) return <div>Loading...</div>;
+  return user ? children : <Navigate to="/login" />;
+};
 
-const PrescriptionUploadPage = lazy(() =>
-  import('./pages/PrescriptionUploadPage').then((module) => ({
-    default: module.PrescriptionUploadPage,
-  })),
-)
-
-const RiskDashboardPage = lazy(() =>
-  import('./pages/RiskDashboardPage').then((module) => ({
-    default: module.RiskDashboardPage,
-  })),
-)
-
-const App = () => {
+export default function App() {
   return (
-    <Suspense fallback={<div className="mx-auto max-w-7xl p-6"><LoadingState /></div>}>
+    <BrowserRouter>
       <Routes>
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<PrescriptionUploadPage />} />
-          <Route path="/dashboard" element={<RiskDashboardPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
+        <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/onboarding" element={<PrivateRoute><OnboardingPage /></PrivateRoute>} />
+        <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
       </Routes>
-    </Suspense>
-  )
+    </BrowserRouter>
+  );
 }
-
-export default App
